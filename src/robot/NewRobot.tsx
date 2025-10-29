@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { App, Form, Input, Modal } from 'antd';
+import { App, Form, Input, Modal, Switch, Collapse } from 'antd';
 import React from 'react';
 import type { Api } from '@/api/wechat-robot/wechat-robot';
 
@@ -50,6 +50,7 @@ const NewRobot = (props: IProps) => {
 			onOk={onOk}
 			confirmLoading={createLoading}
 			onCancel={onClose}
+			width={600}
 		>
 			<Form
 				form={form}
@@ -72,6 +73,70 @@ const NewRobot = (props: IProps) => {
 						allowClear
 					/>
 				</Form.Item>
+
+				<Collapse
+					items={[
+						{
+							key: 'proxy',
+							label: '代理设置（可选）',
+							children: (
+								<>
+									<Form.Item
+										name="proxy_enabled"
+										label="启用代理"
+										valuePropName="checked"
+									>
+										<Switch />
+									</Form.Item>
+
+									<Form.Item
+										name="proxy_ip"
+										label="代理地址"
+										rules={[
+											{
+												validator: (_, value) => {
+													const proxyEnabled = form.getFieldValue('proxy_enabled');
+													if (proxyEnabled && value) {
+														const re = /^[^:]+:\d+$/;
+														if (!re.test(value)) {
+															return Promise.reject(new Error('代理地址格式错误，应为 IP:端口 格式'));
+														}
+													}
+													return Promise.resolve();
+												},
+											},
+										]}
+									>
+										<Input
+											placeholder="例如: 127.0.0.1:8080"
+											allowClear
+										/>
+									</Form.Item>
+
+									<Form.Item
+										name="proxy_user"
+										label="代理用户名"
+									>
+										<Input
+											placeholder="代理用户名（可选）"
+											allowClear
+										/>
+									</Form.Item>
+
+									<Form.Item
+										name="proxy_password"
+										label="代理密码"
+									>
+										<Input.Password
+											placeholder="代理密码（可选）"
+											allowClear
+										/>
+									</Form.Item>
+								</>
+							),
+						},
+					]}
+				/>
 			</Form>
 		</Modal>
 	);
