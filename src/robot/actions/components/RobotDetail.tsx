@@ -1,4 +1,4 @@
-import { FileTextFilled, FundFilled, MacCommandFilled, OpenAIFilled, WechatFilled } from '@ant-design/icons';
+import { FileTextFilled, FundFilled, MacCommandFilled, OpenAIFilled, WechatFilled, SettingFilled } from '@ant-design/icons';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { App, Avatar, Col, Drawer, Row, Skeleton, Space, Spin, Tabs, Tag, theme } from 'antd';
 import type { TabsProps } from 'antd';
@@ -13,6 +13,7 @@ import GlobalSettings from '@/settings';
 import RecreateRobotContainer from '../RecreateRobotContainer';
 import Remove from '../Remove';
 import RestartRobotContainer from '../RestartRobotContainer';
+import RobotProxySettings from './RobotProxySettings';
 
 interface IProps {
 	robotId: number;
@@ -121,6 +122,18 @@ const RobotDetail = (props: IProps) => {
 						robot={data}
 					/>
 				</Suspense>
+			),
+		},
+		{
+			key: 'proxy-settings',
+			icon: <SettingFilled />,
+			label: '代理设置',
+			children: (
+				<RobotProxySettings
+					robotId={props.robotId}
+					robot={data}
+					onRefresh={onRefresh}
+				/>
 			),
 		},
 		{
