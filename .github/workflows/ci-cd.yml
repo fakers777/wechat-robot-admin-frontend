@@ -51,11 +51,8 @@ jobs:
         run: |
           echo "${{ secrets.ACR_PASSWORD }}" | docker login --username="${{ secrets.ACR_USERNAME }}" --password-stdin ${{ secrets.ACR_REGISTRY }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ secrets.ACR_REGISTRY }}/khzhao/wechat-robot-admin-frontend
+      # ✅ 删除 metadata-action 步骤
+
       - name: Build and push Docker image to Alibaba Cloud Registry
         uses: docker/build-push-action@v5
         with:
@@ -64,5 +61,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ secrets.ACR_REGISTRY }}/khzhao/wechat-robot-admin-frontend:latest
-          labels: ${{ steps.meta.outputs.labels }}
+            ${{ secrets.ACR_REGISTRY }}/wechat-robot-admin-frontend:latest
+          # ✅ 删除 labels 参数
