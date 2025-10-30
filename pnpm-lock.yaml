@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@ant-design/icons':
+    specifier: ^5.5.1
+    version: 5.6.1(react-dom@19.0.0)(react@19.0.0)
   ahooks:
     specifier: ^3.8.4
     version: 3.8.4(react@19.0.0)
@@ -58,6 +61,9 @@ devDependencies:
   '@eslint/js':
     specifier: ^9.18.0
     version: 9.18.0
+  '@rsbuild/core':
+    specifier: ^1.2.2
+    version: 1.2.2
   '@rsbuild/plugin-less':
     specifier: ^1.1.0
     version: 1.1.0(@rsbuild/core@1.2.2)
