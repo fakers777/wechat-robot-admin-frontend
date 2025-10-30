@@ -16,6 +16,20 @@ const RobotProxySettings = (props: IProps) => {
 	const { runAsync: onUpdate, loading: updateLoading } = useRequest(
 		async (data: Api.V1RobotUpdateUpdate.RequestBody) => {
 			console.log('调用API更新代理设置:', data);
+			
+			// 检查 API 客户端是否已初始化
+			if (!window.wechatRobotClient || !window.wechatRobotClient.api) {
+				console.error('API客户端未正确初始化');
+				throw new Error('API客户端未正确初始化，请刷新页面重试');
+			}
+			
+			// 检查具体的API方法
+			if (typeof window.wechatRobotClient.api.v1RobotUpdateUpdate !== 'function') {
+				console.error('v1RobotUpdateUpdate方法不存在');
+				console.log('当前可用的API方法:', Object.keys(window.wechatRobotClient.api).filter(key => key.toLowerCase().includes('robot')));
+				throw new Error('代理设置更新接口不可用，请刷新页面重试');
+			}
+			
 			const resp = await window.wechatRobotClient.api.v1RobotUpdateUpdate(data);
 			console.log('API响应:', resp);
 			props.onRefresh();
