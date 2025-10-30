@@ -1,0 +1,47 @@
+name: Build and Save Docker Image
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build_and_save:
+    name: Build Docker image and Save
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: pnpm build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t wechat-robot-admin-frontend:latest .
+
+      - name: Save Docker image as tar
+        run: |
+          docker save wechat-robot-admin-frontend:latest -o image.tar
+
+      - name: Upload Docker image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+          retention-days: 7
